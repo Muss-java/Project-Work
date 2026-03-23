@@ -1,0 +1,41 @@
+-- Script SQL per aggiungere la tabella user_preferences
+-- Esegui questo script in phpMyAdmin o via command line
+
+-- Seleziona il database
+USE bllendr;
+
+-- Crea tabella user_preferences se non esiste già
+CREATE TABLE IF NOT EXISTS user_preferences (
+    preference_id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id VARCHAR(100) NOT NULL,
+    user_number TINYINT NOT NULL,
+    preferred_genres VARCHAR(255) NOT NULL,
+    min_year INT NOT NULL,
+    max_year INT NOT NULL,
+    max_duration INT NOT NULL,
+    min_rating DECIMAL(2,1) DEFAULT 6.0,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_session (session_id),
+    INDEX idx_user (user_number)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Crea tabella per salvare i risultati blend (opzionale)
+CREATE TABLE IF NOT EXISTS blend_results (
+    result_id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id VARCHAR(100) NOT NULL,
+    movie_id INT NOT NULL,
+    match_score INT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
+    INDEX idx_session (session_id),
+    INDEX idx_movie (movie_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Verifica che le tabelle siano state create correttamente
+SHOW TABLES;
+
+-- Mostra la struttura della tabella user_preferences
+DESCRIBE user_preferences;
+
+-- Mostra la struttura della tabella blend_results
+DESCRIBE blend_results;
